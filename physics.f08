@@ -75,7 +75,7 @@ contains
             f = 0
         else
             r_hat = r  / sqrt(dot_product(r, r))
-            f = ((G *b1%m * b2%m) + (k * b1%q * b2%q)) * r_hat / dot_product(r, r)
+            f = ((G *b1%m * b2%m) + (-k * b1%q * b2%q)) * r_hat / dot_product(r, r)
         end if
     end function force
 
