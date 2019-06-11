@@ -1,9 +1,7 @@
-#!/usr/bin/python3
-import argparse
+#!/usr/bin/python3 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
-import mpl_toolkits.mplot3d.axes3d as p3
 from itertools import islice
 
 parser = argparse.ArgumentParser(
@@ -40,14 +38,12 @@ FPS = args.fps if args.fps else 60
 NFRAMES = args.nframes # if none, animate as many frames as possible
 INTERVAL = args.interval if args.interval else 0.3
 
-# x coordinates
+# coordinates
 xs = []
 ys = []
-zs = []
-# y coordinates
+# speeds
 xv = []
 yv = []
-zv = []
 for file_name in args.files:
     print("reading file {}...".format(file_name))
     xs.append([])
@@ -59,22 +55,19 @@ for file_name in args.files:
     with open(file_name, 'r') as f:
         for line in islice(f, 0, None, SAMPLE_FACTOR):
             d = tuple(map(float, line.split()))
-            if len(d) >= 6:
-                x, y, z, vx, vy, vz = d[:6]
+            if len(d) >= 7:
+                r, x, y, _, vx, vy, _ = d[:7]
                 xs[-1].append(x)
                 ys[-1].append(y)
-                zs[-1].append(z)
 
                 xv[-1].append(vx)
                 yv[-1].append(vy)
-                zv[-1].append(vz)
-            elif len(d) >= 3:
-                x, y, z = d[:6]
+            elif len(d) >= 4:
+                r, x, y, _ = d[:4]
                 xs[-1].append(x)
                 ys[-1].append(y)
-                zs[-1].append(z)
-            elif len(d) >= 2:
-                x, y = d[:2]
+            elif len(d) >= 3:
+                r, x, y = d[:3]
                 xs[-1].append(x)
                 ys[-1].append(y)
 
@@ -88,12 +81,9 @@ all_z = sum(zs, [])
 x_min, x_max = min(all_x), max(all_x)
 y_min, y_max = min(all_y), max(all_y)
 z_min, z_max = min(all_z), max(all_z)
-ax = p3.Axes3D(fig, xlim=(x_min, x_max), ylim=(y_min, y_max))
-ax.set_xlim3d((x_min, x_max))
-ax.set_ylim3d((y_min, y_max))
-ax.set_zlim3d((z_min, z_max))
-points = tuple(ax.plot(all_x, all_y,  all_z, 'o', ms=6)[0] for i in range(len(xs)))
-lines = tuple(ax.plot(all_x, all_y, all_z, lw=2)[0] for i in range(len(xs)))
+ax = plt.axes(xlim=(x_min, x_max), ylim=(y_min, y_max))
+points = tuple(ax.plot([], [], 'o', ms=6)[0] for i in range(len(xs)))
+lines = tuple(ax.plot([], [], lw=2)[0] for i in range(len(xs)))
 
 # Update to decrement last point draw if current velocity < old velocity
 def line_begin(i, j):
@@ -105,9 +95,7 @@ def line_begin(i, j):
 def init():
     for line, point in zip(lines, points):
         line.set_data([], [])
-        line.set_3d_properties([])
         point.set_data([], [])
-        point.set_3d_properties([])
 
     return tuple(points) + tuple(lines)
 
@@ -119,9 +107,7 @@ def animate(i):
     f = lambda l: l[i]
     for j in range(len(xs)):
         points[j].set_data([xs[j][i]], [ys[j][i]])
-        points[j].set_3d_properties([zs[j][i]])
         lines[j].set_data(xs[j][line_begin(i, j):i], ys[j][line_begin(i, j):i])
-        lines[j].set_3d_properties(zs[j][line_begin(i, j):i])
 
     return tuple(points) + tuple(lines)
 
