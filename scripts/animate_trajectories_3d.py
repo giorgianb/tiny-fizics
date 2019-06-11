@@ -75,7 +75,7 @@ for file_name in args.files:
                 zs[-1].append(z)
 
 n = min(map(len, xs))
-NFRAMES = NFRAMES if NFRAMES else n
+NFRAMES = min(n, NFRAMES) if NFRAMES else n
 
 fig = plt.figure()
 all_x = sum(xs, [])

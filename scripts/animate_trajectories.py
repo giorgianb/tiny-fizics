@@ -1,4 +1,5 @@
-#!/usr/bin/python3 import argparse
+#!/usr/bin/python3 
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
@@ -72,7 +73,7 @@ for file_name in args.files:
                 ys[-1].append(y)
 
 n = min(map(len, xs))
-NFRAMES = NFRAMES if NFRAMES else n
+NFRAMES = min(n, NFRAMES) if NFRAMES else n
 
 fig = plt.figure()
 all_x = sum(xs, [])
