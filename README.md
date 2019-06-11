@@ -66,3 +66,9 @@ This will animate the data from the  `.dat` files produced by the simulations an
 * `--sample-factor`: There are many times where we don't wish to animate every single time step. In fact, it's possible that none of the bodies moved at least a pixel's worth of coordinates during a time steps. Thus, we might wish to take every `n` time steps as the frames we're going to animate. More concretly, if our file contains lines `l_0, l_1, l_1, .. l_n` specifying the coordinates and velocities of our bodies, if our sample factor is `10`, only likes `l_0, l_10, l_20, ...` will be used, Usually, `100` or `1000` is a good choice, but it is recommended to play around with this number and see what sort of animations you get. 
 * `--nframes`: This specifies how many frames the animation should contain - usually useful if you want to put an upper limit on how many frames to animate so the animation process doesn't take too long.
 * `--interval`: This puts a lower bound, in milliseconds, on the interval between each frame. This is useful to change if you feel like your animations are too slow.
+
+### ray-tracer animations
+TO DO
+
+### GIMP gif animations
+TO DO
