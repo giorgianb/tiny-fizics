@@ -1,2 +1,2 @@
-# fizics
-Basic Physics Simulator written in Fortran
+# tiny-fizics
+Tiny Physics Simulator written in Fortran
