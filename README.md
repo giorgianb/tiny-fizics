@@ -48,3 +48,21 @@ $ bin/simulate examples/charged.fz
 ```
 
 In this case, `examples/charged.fz` is the simulation file. This will produce a bunch of `.dat` files in the current directory, which specify the radius, positions and velocities of the body at each time step. The format of these files is `r x y z vx vy vz`, where `r` is the radius of the body, `x y z` is the position of the body, and `vx vy vz` is the velocity of the body. For a 3-body system, 3 files will be created: `p-0000000001.dat`, `p-0000000002.dat` and `p-0000000003.dat`. These files specify the radii, positions, and velocity of each body respectively. 
+
+## Making animations
+So now that you've run a simulation, you wish to actually animate it. There are a few ways to do this.
+
+### Matplotlib animations
+Suppose you've run a simulation and now have a bunch of `.dat` files lying around, which you wish to use to create a `matplotlib` animation. You can use `scripts/animate_trajectories.py` and `scripts/animate_trajectories_3d.py` in order to do so. They both work in very similar ways - the only difference is that `animate_trajectories.py` ignores the `z` coordinates of the animation. These are both simple files and it is highly encouraged to open them and modify them to suit your needs. This is especially useful if you wish to apply some transformation to the points before you animate them.
+
+We will be using `scripts/animate_trajectories_3d.py`, but usage of `scripts/aniamte_trajectories.py` is identical.
+```
+$ scripts/animate_trajectories_3d.py --output my_ani.mp4 *.dat
+```
+This will animate the data from the  `.dat` files produced by the simulations and placed the animation into `my_ani.mp4`. There are a few parameters that `scripts/animate_trajectories_3d.py` and `scripts/animate_trajectories.py` take that are worth knowing.
+
+* `--fps`: This one is simple. It specifies the frames per second of the `mp4` file produced.
+* `--output`: Specifies what to name the produced `mp4` animation file.
+* `--sample-factor`: There are many times where we don't wish to animate every single time step. In fact, it's possible that none of the bodies moved at least a pixel's worth of coordinates during a time steps. Thus, we might wish to take every `n` time steps as the frames we're going to animate. More concretly, if our file contains lines `l_0, l_1, l_1, .. l_n` specifying the coordinates and velocities of our bodies, if our sample factor is `10`, only likes `l_0, l_10, l_20, ...` will be used, Usually, `100` or `1000` is a good choice, but it is recommended to play around with this number and see what sort of animations you get. 
+* `--nframes`: This specifies how many frames the animation should contain - usually useful if you want to put an upper limit on how many frames to animate so the animation process doesn't take too long.
+* `--interval`: This puts a lower bound, in milliseconds, on the interval between each frame. This is useful to change if you feel like your animations are too slow.
