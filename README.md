@@ -1,2 +1,2 @@
 # tiny-fizics
-Tiny Physics Simulator written in Fortran
+Tiny physics engine written in modern Fortran
