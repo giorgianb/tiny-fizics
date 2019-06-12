@@ -83,15 +83,32 @@ for i in range(NFRAMES):
         print("finished creating frame {}...".format(i))
 
     with open(file_name, 'w') as f:
-        print("PointLightSource\n0 0 -100  30000", file=f)
         print("""
+PointLightSource
+0 0 -100  30000
+
+PointLightSource
+0 0 100  30000
+
 CheckeredPlane
-100 0 0	    0 0 100	0 -100 0
+10 0 0	    0 10 0	0 0 400
 3
-0 0 0 1 1 1 0
+0 0 0 1 .9 .5 .3
+0 0 0 1 .7 .2 .1
+0 0 0 1 .1 .6 .9
+
+CheckeredPlane
+100 0 0	    0 0 100	0 -100 -300
+3
 0 0 0 1 1 0 1
-0 0 0 1 0 1 1""", file=f)
+1 0 0 0 1 1 0
+0 0 0 1 0 1 1
+CheckeredPlane
+100 0 0	    0 0 100	-100 100 0
+2
+0 0 0 1 1 1 1
+0 0 0 1 0 0 0""", file=f)
         for j, clist in enumerate(xs):
             x, y, z = clist[i]
             r, g, b = colors[j]
-            print("Sphere\n{} {} {} {} 0 0 0 1 {} {} {}".format(x, y, z, radii[j], r, g, b), file=f)
+            print("Sphere\n{} {} {} {} 1 0 0 0 {} {} {}".format(x, y, z, radii[j], r, g, b), file=f)
