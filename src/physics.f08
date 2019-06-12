@@ -32,13 +32,25 @@ contains
         type(particle), intent(in) :: b1, b2
         type(particle), intent(out) :: nb1
         type(particle), intent(out), optional :: nb2
+        real(kind=pkind), dimension(d) :: n ! vector normal to their collision
+        real(kind=pkind), dimension(d) :: tv1, tv2 ! velocity normal to collision axis
+        real(kind=pkind), dimension(d) :: pv1, pv2 ! velocity parallel to collision axis
+        
+        n = (b2%x - b1%x) / sqrt(dot_product(b2%x - b1%x, b2%x - b1%x))
+        tv1 = dot_product(n, b1%v) * n ! get component of velocity normal to collision
+        pv1 = b1%v - tv1               ! get component of velocity parallel to collision
+        tv2 = dot_product(n, b2%v) * n ! get component of velocity normal to collision
+        pv2 = b2%v - tv2               ! get component of velocity parallel to collision
         
         nb1 = b1
         if (present(nb2)) nb2 = b2
         
         ! Through momentum and kinetic energy conservation
-        nb1%v = ((b1%m - b2%m) * b1%v + 2*b2%m * b2%v)/(b1%m + b2%m)
-        if (present(nb2)) nb2%v = ((b2%m - b1%m) * b2%v + 2*b1%m * b1%v)/(b1%m + b2%m)
+        nb1%v = ((b1%m - b2%m) * tv1 + 2*b2%m * tv2)/(b1%m + b2%m) + pv1
+        if (present(nb2)) then
+            nb2 = b2
+            nb2%v = ((b2%m - b1%m) * tv2 + 2*b1%m * tv1)/(b1%m + b2%m) + pv2
+        end if
     end subroutine collision
 
     pure subroutine collides(bi, b, collision, cb)
